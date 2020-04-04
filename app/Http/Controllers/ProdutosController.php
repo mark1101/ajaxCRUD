@@ -10,10 +10,8 @@ class ProdutosController extends Controller
 {
     public function indexShow()
     {
-        $data = Produto::all();
-
         return view('produtosShow', [
-            'produtos' => $data
+            'produtos' => $data = Produto::all();
         ]);
     }
 
@@ -24,10 +22,7 @@ class ProdutosController extends Controller
 
     public function create(Request $request)
     {
-
-        $data = $request->all();
-
-        Produto::create($data);
+        Produto::create($request->all());
 
         return redirect('/produtosCreate');
     }
@@ -83,14 +78,6 @@ class ProdutosController extends Controller
     public function pegaCheck(Request $request)
     {
 
-        //dd($request->testePesquisa);
-
-        //dd($request->testePesquisa);
-
-        //$teste = $request->testePesquisa;
-
-        //$valor = implode(" " , $teste);
-        //dd($valor);
         if($request->comida and $request->bebida != null){
             $data = Produto::where('descricao', 'like', '%' . $request->comida . '%')
                 ->and('descrica', 'like', '%' . $request->comida . '%')
@@ -116,9 +103,7 @@ class ProdutosController extends Controller
 
     public function puxaProduto($id)
     {
-
-        $data = Produto::where('id', $id)->get();
-        if (count($data) == 0) {
+        if (Produto::where('id', $id)->count() == 0) {
             $response['sucess'] = true;
             $response['message'] = "Nenhum Produto Encontrado";
 
@@ -144,12 +129,9 @@ class ProdutosController extends Controller
         echo json_encode($response);
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
-
-        $data = $request->all();
-        unset($data['_token']);
-        Produto::where('id', $id)->delete($data);
+        Produto::where('id', $id)->delete();
 
         $response['success'] = true;
         $response['message'] = "Produto deletado com Sucesso !";
