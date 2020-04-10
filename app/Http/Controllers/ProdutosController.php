@@ -11,9 +11,13 @@ class ProdutosController extends Controller
     public function indexShow()
     {
         $data = Produto::all();
+        $data2 = Produto::all();
 
+        $produtos = count($data);
         return view('produtosShow', [
-            'produtos' => $data
+            'produtos' => $data,
+            'produtos2' => $data2,
+            'total'=> $produtos
         ]);
     }
 
@@ -83,31 +87,43 @@ class ProdutosController extends Controller
     public function pegaCheck(Request $request)
     {
 
-        //dd($request->testePesquisa);
+        $teste = $request->testePesquisa;
 
-        //dd($request->testePesquisa);
 
-        //$teste = $request->testePesquisa;
 
-        //$valor = implode(" " , $teste);
-        //dd($valor);
-        if($request->comida and $request->bebida != null){
-            $data = Produto::where('descricao', 'like', '%' . $request->comida . '%')
-                ->and('descrica', 'like', '%' . $request->comida . '%')
-                ->get();
+
+        $data = [];
+        $total = [];
+        for ($i = 0; $i < count($teste); $i++) {
+            $temp = Produto::where('descricao', 'like', '%' . $teste[$i] . '%')->get();
+            if($temp != [] && count($temp) > 0){
+                $data[] = $temp;
+            }
         }
-        if ($request->comida != null) {
-            $data = Produto::where('descricao', 'like', '%' . $request->comida . '%')
-                ->get();
+
+
+        for ($i = 0; $i < count($data); $i++) {
+            foreach ($data[$i] as $item){
+                $total[] = $item;
+            }
         }
-        else if ($request->bebida != null){
-            $data = Produto::where('descricao', 'like', '%' . $request->bebida . '%')
-                ->get();
-        }
+
+        //dd($total);
+
+
+
+
+        /*foreach ($data as $d) {
+            $valor = $d;
+        }*/
+
+
+
 
 
         $response['success'] = true;
-        $response['data'] = $data;
+        $response['data'] = $total;
+        $response['quantidade'] = count($total);
 
         echo json_encode($response);
 

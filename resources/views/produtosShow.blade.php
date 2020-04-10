@@ -26,7 +26,7 @@
         </div>
         <div class="container">
             <div class="form-group">
-                <label for="exampleInputEmail1">Pesquisa de produto por nome</label>
+                <label for="exampleInputEmail1">Pesquisa de produto por nome, estão cadastrados {{$total}} produtos</label>
                 <input type="text" onkeyup="submitForm()" class="form-control" name="criterio" id="criterio"
                        aria-describedby="emailHelp" placeholder="Digite o nome do Produto...">
             </div>
@@ -67,17 +67,19 @@
     </div>
 
     <div class="container">
-            <form id="buscaCheck">
-                @csrf
-                <input type="checkbox" class="form-check-input" name="comida" value = "comida">
-                <label>Teste 1 </label>
-                <br>
-                <input type="checkbox" class="form-check-input" name = "bebida" value = "bebida">
-                <label>Teste 2</label>
-                <br>
-                <button type="submit" class="btn btn-primary">Mandar</button>
-            </form>
-
+        <form id="buscaCheck">
+            @csrf
+            <input type="checkbox" class="form-check-input" name="testePesquisa[]" value="comida">
+            <label>Comida</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="testePesquisa[]" value="bebida">
+            <label>Bebida</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="testePesquisa[]" value="movel">
+            <label>Moveis</label>
+            <br>
+            <button type="submit" class="btn btn-primary">Mandar</button>
+        </form>
     </div>
 
 
@@ -553,7 +555,7 @@
         });
     </script> <!-- funcao que mostra pelas bebidas -->
 
-     <script>
+    <script>
         $(function () {
             $('form[id="buscaCheck"]').submit(function (event) {
                 event.preventDefault();
@@ -604,7 +606,7 @@
                 });
             });
         });
-    </script>  <!--funcao que mostra pelos moveis -->
+    </script>
 
 @endsection
 
