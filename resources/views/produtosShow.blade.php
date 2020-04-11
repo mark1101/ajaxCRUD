@@ -26,7 +26,8 @@
         </div>
         <div class="container">
             <div class="form-group">
-                <label for="exampleInputEmail1">Pesquisa de produto por nome, estão cadastrados {{$total}} produtos</label>
+                <label for="exampleInputEmail1">Pesquisa de produto por nome, estão cadastrados {{$total}}
+                    produtos</label>
                 <input type="text" onkeyup="submitForm()" class="form-control" name="criterio" id="criterio"
                        aria-describedby="emailHelp" placeholder="Digite o nome do Produto...">
             </div>
@@ -35,37 +36,32 @@
 
     <div class="container">
         <div class="row">
-            <form id="buscaComida">
+            <form id="filters" name="filters" action="{{ route('teste') }}" method="POST">
                 @csrf
-                <button type="submit"
-                        style="border-radius: 15px ; color: white ; background-color: #1d68a7 ; padding-left: 25px ; padding-right: 25px">
+                <input type="hidden" name="filterValues" id="filterValues">
+
+                <button data-id="comida" data-checked="false" type="button" class="filter-btn btn btn-success">
                     Comida
                 </button>
-            </form>
-            <form id="buscaMoveis">
-                @csrf
-                <button type="submit"
-                        style="border-radius: 15px ; color: white ; background-color: #1d68a7 ; padding-left: 25px ; padding-right: 25px">
+
+                <button data-id="movel" data-checked="false" type="button" class="filter-btn btn btn-success">
                     Moveis
                 </button>
-            </form>
-            <form id="buscaBebida">
-                @csrf
-                <button type="submit"
-                        style="border-radius: 15px ; color: white ; background-color: #1d68a7; padding-left: 25px ; padding-right: 25px">
-                    Bebidas
+
+                <button data-id="bebida" data-checked="false" type="button" class="filter-btn btn btn-success">
+                    Bebida
                 </button>
-            </form>
-            <form id="">
-                @csrf
-                <button type=""
-                        style="border-radius: 15px ; color: white ; background-color: green; padding-left: 25px ; padding-right: 25px">
-                    Ativar
-                </button>
+
+                <button type="submit" class="btn btn-primary">Mandar</button>
             </form>
         </div>
     </div>
 
+
+
+
+
+    <br><br>
     <div class="container">
         <form id="buscaCheck">
             @csrf
@@ -608,6 +604,69 @@
         });
     </script>
 
+    <br><br><br>
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Descricao</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Disponibilidade</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            @foreach($a as $item)
+                <tr>
+                    <th>{{$item->nome}}</th>
+                    <td>{{$item->descricao}}</td>
+                    <td>{{$item->valor}}</td>
+                    <td>{{$item->quantidade}}</td>
+                    <td>{{$item->disponibilidade}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endforeach
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var selectedFilters = [];
+
+            $('.filter-btn').on('click', function () {
+                var clickedButton = $(this);
+
+                var checked = !Boolean(clickedButton.data('checked'));
+                clickedButton.data('checked', checked);
+
+                var dataId = clickedButton.data('id');
+
+                clickedButton.toggleClass("btn-success");
+                clickedButton.toggleClass("btn-warning");
+
+                if (!selectedFilters.includes(dataId) && checked) {
+                    selectedFilters.push(dataId);
+                } else {
+                    const index = selectedFilters.indexOf(dataId);
+
+                    if (index > -1) {
+                        selectedFilters.splice(index, 1);
+                    }
+                }
+
+                var formattedFilters = selectedFilters.join(",");
+                $('#filterValues').val(formattedFilters);
+            });
+        });
+
+    </script>
 @endsection
 
 <!-- Optional JavaScript -->

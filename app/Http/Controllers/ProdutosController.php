@@ -14,10 +14,13 @@ class ProdutosController extends Controller
         $data2 = Produto::all();
 
         $produtos = count($data);
+        $a = Produto::all();
+
         return view('produtosShow', [
             'produtos' => $data,
             'produtos2' => $data2,
-            'total'=> $produtos
+            'total'=> $produtos,
+            'a' => $a
         ]);
     }
 
@@ -84,13 +87,46 @@ class ProdutosController extends Controller
         echo json_encode($response);
     }
 
+    public function teste(Request $request)
+    {
+        $filters = $request->get('filterValues');
+
+        if ($filters) {
+            $values = explode(",", $filters);
+        }
+
+        for ($i = 0; $i < count($values); $i++) {
+            $temp = Produto::where('descricao', 'like', '%' . $values[$i] . '%')->get();
+            if($temp != [] && count($temp) > 0){
+                $data[] = $temp;
+            }
+        }
+
+        for ($i = 0; $i < count($data); $i++) {
+            foreach ($data[$i] as $item){
+                $total[] = $item;
+            }
+        }
+
+
+        $final = array_unique($total);
+        //dd($total);
+        $u = Produto::all();
+        $produtos = count($u);
+
+        return view('produtosShow', [
+            'a' => $final,
+            'total'=> $produtos,
+            'produtos' => $u
+        ]);
+
+
+    }
     public function pegaCheck(Request $request)
     {
 
+
         $teste = $request->testePesquisa;
-
-
-
 
         $data = [];
         $total = [];
@@ -107,19 +143,6 @@ class ProdutosController extends Controller
                 $total[] = $item;
             }
         }
-
-        //dd($total);
-
-
-
-
-        /*foreach ($data as $d) {
-            $valor = $d;
-        }*/
-
-
-
-
 
         $response['success'] = true;
         $response['data'] = $total;

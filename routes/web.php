@@ -35,3 +35,5 @@ Route::post('/alteraProduto/{id}', 'ProdutosController@update')->name('updatePro
 Route::post('/deleteProduto/{id}', 'ProdutosController@delete')->name('deleteProduto')->middleware('auth');
 
 Route::post('checkbox' , 'ProdutosController@pegaCheck')->name('pegaCheck');
+
+Route::post('testabotao', 'ProdutosController@teste')->name('teste');
